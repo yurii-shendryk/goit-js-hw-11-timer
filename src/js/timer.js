@@ -23,29 +23,21 @@ class CountdownTimer {
       return;
     }
     this.deltaTime;
-    if (this.deltaTime <= 0) {
-      this.updateClockface(0);
-      return;
-    }
     this.updateClockface(this.deltaTime);
     this.intervalId = setInterval(() => {
-      if (this.deltaTime <= 0) {
-        clearInterval(this.intervalId);
-        this.updateClockface(0);
-        return;
-      }
       const startTime = this.targetDate.getTime();
       const currentTime = Date.now();
       const deltaTime = startTime - currentTime;
+      if (deltaTime <= 0) {
+        this.stop();
+      }
       this.updateClockface(deltaTime);
     }, 1000);
   }
   // удаляем таймер после окончания отсчета времени
   stop() {
     clearInterval(this.intervalId);
-    // this.root.innerHTML = '<b style="font-size:50px">Событие закончилось</b>';
     this.root.innerHTML = '';
-    this.intervalId = null;
   }
 
   updateClockface(time) {
@@ -65,38 +57,24 @@ class CountdownTimer {
   }
 }
 
-const timer1 = new CountdownTimer({
+const firstTimer = new CountdownTimer({
   selector: '#timer-1',
-  targetDate: new Date(2021, 1, 3, 0, 55),
+  targetDate: new Date('Jun 05, 2021'),
 });
-timer1.start();
-setTimeout(() => {
-  timer1.stop();
-}, timer1.deltaTime);
 
-const timer2 = new CountdownTimer({
+firstTimer.start();
+
+setTimeout(() => {
+  firstTimer.stop();
+}, firstTimer.deltaTime);
+
+const secondTimer = new CountdownTimer({
   selector: '#timer-2',
-  targetDate: new Date(2021, 1, 3, 0, 58),
+  targetDate: new Date('Jul 05, 2021'),
 });
-timer2.start();
-setTimeout(() => {
-  timer2.stop();
-}, timer2.deltaTime);
 
-const timer3 = new CountdownTimer({
-  selector: '#timer-3',
-  targetDate: new Date(2021, 1, 3, 0, 58),
-});
-timer3.start();
-setTimeout(() => {
-  timer3.stop();
-}, timer3.deltaTime);
+secondTimer.start();
 
-const timer4 = new CountdownTimer({
-  selector: '#timer-4',
-  targetDate: new Date(2021, 1, 3, 0, 58),
-});
-timer4.start();
 setTimeout(() => {
-  timer4.stop();
-}, timer4.deltaTime);
+  secondTimer.stop();
+}, secondTimer.deltaTime);
